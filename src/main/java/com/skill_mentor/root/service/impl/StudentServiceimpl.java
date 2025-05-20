@@ -1,5 +1,6 @@
 package com.skill_mentor.root.service.impl;
 
+import com.skill_mentor.root.dao.StudentDAO;
 import com.skill_mentor.root.dto.StudentDTO;
 import com.skill_mentor.root.repository.StudentRepository;
 import com.skill_mentor.root.service.StudentService;
@@ -13,15 +14,17 @@ public class StudentServiceimpl implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private StudentDAO studentDAO;
+
     @Override
     public StudentDTO createStudent(StudentDTO studentDTO) {
-        StudentDTO studentDTO1 = studentRepository.createStudent(studentDTO);
-        return studentDTO1;
+        return studentDAO.createStudent(studentDTO);
     }
 
     @Override
-    public List<StudentDTO> getAllStudents(Integer age) {
-        return studentRepository.getAllStudents(age);
+    public List<StudentDTO> getAllStudents() {
+        return studentDAO.getAllStudents();
     }
 
     @Override

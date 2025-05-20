@@ -1,12 +1,10 @@
-package com.skill_mentor.root.service;
+package com.skill_mentor.root.dao;
 
 import com.skill_mentor.root.dto.StudentDTO;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public interface StudentService {
+public interface StudentDAO {
     StudentDTO createStudent(StudentDTO studentDTO);
 
     List<StudentDTO> getAllStudents();
