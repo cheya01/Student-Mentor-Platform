@@ -1,7 +1,8 @@
 package com.skill_mentor.root.service.impl;
 
-import com.skill_mentor.root.dao.StudentDAO;
 import com.skill_mentor.root.dto.StudentDTO;
+import com.skill_mentor.root.entity.StudentEntity;
+import com.skill_mentor.root.mapper.StudentEntityDTOMapper;
 import com.skill_mentor.root.repository.StudentRepository;
 import com.skill_mentor.root.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,31 +15,46 @@ public class StudentServiceimpl implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
-    @Autowired
-    private StudentDAO studentDAO;
-
     @Override
     public StudentDTO createStudent(StudentDTO studentDTO) {
-        return studentDAO.createStudent(studentDTO);
+        final StudentEntity studentEntity = StudentEntityDTOMapper.map(studentDTO);
+        final StudentEntity savedEntity = studentRepository.save(studentEntity);
+        return StudentEntityDTOMapper.map(savedEntity);
     }
 
     @Override
     public List<StudentDTO> getAllStudents() {
-        return studentDAO.getAllStudents();
+        final List<StudentEntity> studentEntities = studentRepository.findAll();
+        return studentEntities.stream().map(StudentEntityDTOMapper::map).toList();
     }
 
     @Override
     public StudentDTO getStudentById(Integer id) {
-        return studentRepository.getStudentById(id);
+        return studentRepository.findById(id)
+                .map(StudentEntityDTOMapper::map)
+                .orElse(null);
     }
 
     @Override
     public StudentDTO updateStudentById(Integer id, StudentDTO studentDTO) {
-        return studentRepository.updateStudentById(id, studentDTO);
+        return studentRepository.findById(id)
+                .map(existing -> {
+                    existing.setFirstName(studentDTO.getFirstName());
+                    existing.setLastName(studentDTO.getLastName());
+                    existing.setEmail(studentDTO.getEmail());
+                    existing.setPhoneNumber(studentDTO.getPhoneNumber());
+                    existing.setAddress(studentDTO.getAddress());
+                    existing.setAge(studentDTO.getAge());
+                    return StudentEntityDTOMapper.map(studentRepository.save(existing));
+                }).orElse(null);
     }
 
     @Override
     public boolean deleteStudentById(Integer id) {
-        return studentRepository.deleteStudentById(id);
+        if (studentRepository.existsById(id)) {
+            studentRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

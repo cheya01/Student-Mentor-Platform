@@ -20,4 +20,8 @@ public @Data class StudentDTO {
         this.address = address;
         this.age = age;
     }
+
+    public StudentDTO() {
+
+    }
 }
