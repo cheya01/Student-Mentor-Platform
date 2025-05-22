@@ -9,7 +9,7 @@ import java.util.List;
 public interface StudentService {
     StudentDTO createStudent(StudentDTO studentDTO);
 
-    List<StudentDTO> getAllStudents();
+    List<StudentDTO> getAllStudents(String city, Integer age);
 
     StudentDTO getStudentById(Integer id);
 
