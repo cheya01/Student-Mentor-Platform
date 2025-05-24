@@ -3,7 +3,6 @@ package com.skill_mentor.root.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -38,8 +37,9 @@ public class UserEntity {
     @Column(nullable = false)
     private String passwordHash;
 
-    @Column(nullable = false)
-    private String role; // STUDENT, MENTOR, ADMIN
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", nullable = false)
+    private RoleEntity role;
 
     @Column(nullable = false)
     private Boolean isActive = true;
@@ -57,8 +57,9 @@ public class UserEntity {
 
     private String NIC;
 
+    // Custom constructor (RoleEntity, not Integer)
     public UserEntity(Integer userId, String firstName, String lastName, String email, String passwordHash,
-                      String role, Boolean isActive, LocalDateTime createdAt, LocalDateTime lastLogin,
+                      RoleEntity role, Boolean isActive, LocalDateTime createdAt, LocalDateTime lastLogin,
                       String phoneNumber, String address, String NIC) {
         this.userId = userId;
         this.firstName = firstName;

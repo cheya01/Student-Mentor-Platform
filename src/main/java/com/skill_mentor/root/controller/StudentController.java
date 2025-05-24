@@ -25,7 +25,6 @@ public class StudentController {
     public ResponseEntity<StudentDTO> createStudent(@Valid @RequestBody StudentDTO studentDTO) {
         StudentDTO savedStudent = studentService.createStudent(studentDTO);
         return new ResponseEntity<>(savedStudent, HttpStatus.OK);
-
     }
 
     @GetMapping()

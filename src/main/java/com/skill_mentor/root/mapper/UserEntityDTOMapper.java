@@ -1,10 +1,12 @@
 package com.skill_mentor.root.mapper;
 
 import com.skill_mentor.root.dto.UserDTO;
+import com.skill_mentor.root.entity.RoleEntity;
 import com.skill_mentor.root.entity.UserEntity;
 
 public class UserEntityDTOMapper {
 
+    // Map from Entity → DTO
     public static UserDTO map(UserEntity userEntity) {
         if (userEntity == null) return null;
 
@@ -13,8 +15,8 @@ public class UserEntityDTOMapper {
         userDTO.setFirstName(userEntity.getFirstName());
         userDTO.setLastName(userEntity.getLastName());
         userDTO.setEmail(userEntity.getEmail());
-        userDTO.setPasswordHash(userEntity.getPasswordHash());
-        userDTO.setRole(userEntity.getRole());
+        userDTO.setPasswordHash(userEntity.getPasswordHash()); // write-only
+        userDTO.setRoleId(userEntity.getRole() != null ? userEntity.getRole().getId() : null);
         userDTO.setIsActive(userEntity.getIsActive());
         userDTO.setCreatedAt(userEntity.getCreatedAt());
         userDTO.setLastLogin(userEntity.getLastLogin());
@@ -24,7 +26,8 @@ public class UserEntityDTOMapper {
         return userDTO;
     }
 
-    public static UserEntity map(UserDTO userDTO) {
+    // Map from DTO → Entity (requires a RoleEntity passed from service)
+    public static UserEntity map(UserDTO userDTO, RoleEntity roleEntity) {
         if (userDTO == null) return null;
 
         UserEntity userEntity = new UserEntity();
@@ -33,7 +36,7 @@ public class UserEntityDTOMapper {
         userEntity.setLastName(userDTO.getLastName());
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setPasswordHash(userDTO.getPasswordHash());
-        userEntity.setRole(userDTO.getRole());
+        userEntity.setRole(roleEntity);
         userEntity.setIsActive(userDTO.getIsActive());
         userEntity.setCreatedAt(userDTO.getCreatedAt());
         userEntity.setLastLogin(userDTO.getLastLogin());

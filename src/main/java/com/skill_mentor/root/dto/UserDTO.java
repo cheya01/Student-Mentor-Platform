@@ -1,6 +1,6 @@
 package com.skill_mentor.root.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -28,11 +28,14 @@ public class UserDTO {
     @Email(message = "Email should be valid")
     private String email;
 
+    @Valid
     @NotBlank(message = "Password is mandatory")
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String passwordHash;
 
-    private String role; // STUDENT, MENTOR, ADMIN
+    @NotNull(message = "Role ID is mandatory")
+    private Integer roleId;  // ID of RoleEntity (e.g. 1=STUDENT, 2=MENTOR, etc.)
+
     private Boolean isActive;
 
     // Timestamps
@@ -49,14 +52,14 @@ public class UserDTO {
 
     // All-args constructor
     public UserDTO(Integer userId, String firstName, String lastName, String email, String passwordHash,
-                   String role, Boolean isActive, LocalDateTime createdAt, LocalDateTime lastLogin,
+                   Integer roleId, Boolean isActive, LocalDateTime createdAt, LocalDateTime lastLogin,
                    String phoneNumber, String address, String NIC) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.passwordHash = passwordHash;
-        this.role = role;
+        this.roleId = roleId;
         this.isActive = isActive;
         this.createdAt = createdAt;
         this.lastLogin = lastLogin;

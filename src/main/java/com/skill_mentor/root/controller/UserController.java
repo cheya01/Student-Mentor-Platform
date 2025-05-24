@@ -3,6 +3,8 @@ package com.skill_mentor.root.controller;
 import com.skill_mentor.root.dto.UserDTO;
 import com.skill_mentor.root.service.UserService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +20,14 @@ import java.util.Map;
 @RequestMapping(value = "api/v1/user")
 public class UserController {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Autowired
     private UserService userService;
 
     @PostMapping()
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
+        logger.info("Controller reached: creating user");
         UserDTO savedUser = userService.createUser(userDTO);
         return new ResponseEntity<>(savedUser, HttpStatus.OK);
     }
