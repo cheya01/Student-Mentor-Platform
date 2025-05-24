@@ -40,21 +40,23 @@ public class UserServiceimpl implements UserService {
 
     @Override
     public List<UserDTO> getAllUsers(String roleName, Boolean isActive) {
-        List<UserEntity> userEntities = userRepository.findAll();
+        List<UserEntity> userEntities = userRepository.findAllWithRoles(); // fetch roles eagerly
 
         return userEntities.stream()
                 .filter(user -> {
-                    boolean matchesRole = (roleName == null ||
+                    boolean matchesRole = (roleName == null || (
                             user.getRole() != null &&
-                                    roleName.equalsIgnoreCase(user.getRole().getRole()));
+                                    user.getRole().getRole() != null &&
+                                    roleName.equalsIgnoreCase(user.getRole().getRole())
+                    ));
 
                     boolean matchesActive = (isActive == null || isActive.equals(user.getIsActive()));
-
                     return matchesRole && matchesActive;
                 })
                 .map(UserEntityDTOMapper::map)
                 .toList();
     }
+
 
 
     @Override
