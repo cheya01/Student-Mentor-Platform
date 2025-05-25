@@ -21,11 +21,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/test")
-    public String test() {
-        return "Hello, world!";
-    }
-
     @GetMapping()
     public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam(required = false) String role,
                                                      @RequestParam(required = false) Boolean isActive) {

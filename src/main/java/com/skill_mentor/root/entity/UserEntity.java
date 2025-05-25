@@ -37,7 +37,7 @@ public class UserEntity {
     @Column(nullable = false)
     private String passwordHash;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private RoleEntity role;
 
