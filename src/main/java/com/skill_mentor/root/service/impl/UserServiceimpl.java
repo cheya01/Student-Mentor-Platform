@@ -69,30 +69,31 @@ public class UserServiceimpl implements UserService {
     @Override
     public UserDTO updateUserById(Integer id, UserDTO userDTO) {
         return userRepository.findById(id)
-                .map(existing -> {
-                    existing.setFirstName(userDTO.getFirstName());
-                    existing.setLastName(userDTO.getLastName());
-                    existing.setEmail(userDTO.getEmail());
+                .map(user -> {
+                    if (userDTO.getFirstName() != null)
+                        user.setFirstName(userDTO.getFirstName());
+                    if (userDTO.getLastName() != null)
+                        user.setLastName(userDTO.getLastName());
+                    if (userDTO.getEmail() != null)
+                        user.setEmail(userDTO.getEmail());
+                    if (userDTO.getPasswordHash() != null && !userDTO.getPasswordHash().isBlank())
+                        user.setPasswordHash(passwordEncoder.encode(userDTO.getPasswordHash()));
+                    if (userDTO.getRoleId() != null)
+                        user.setRole(roleRepository.findById(userDTO.getRoleId()).orElseThrow());
+                    if (userDTO.getPhoneNumber() != null)
+                        user.setPhoneNumber(userDTO.getPhoneNumber());
+                    if (userDTO.getAddress() != null)
+                        user.setAddress(userDTO.getAddress());
+                    if (userDTO.getNIC() != null)
+                        user.setNIC(userDTO.getNIC());
+                    if (userDTO.getIsActive() != null)
+                        user.setIsActive(userDTO.getIsActive());
 
-                    // Hash the password only if a new one is provided
-                    if (userDTO.getPasswordHash() != null && !userDTO.getPasswordHash().isBlank()) {
-                        existing.setPasswordHash(passwordEncoder.encode(userDTO.getPasswordHash()));
-                    }
-
-                    // Resolve role from roleId
-                    RoleEntity role = roleRepository.findById(userDTO.getRoleId())
-                            .orElseThrow(() -> new IllegalArgumentException("Invalid role ID"));
-                    existing.setRole(role);
-
-                    existing.setIsActive(userDTO.getIsActive());
-                    existing.setPhoneNumber(userDTO.getPhoneNumber());
-                    existing.setAddress(userDTO.getAddress());
-                    existing.setNIC(userDTO.getNIC());
-
-                    return UserEntityDTOMapper.map(userRepository.save(existing));
+                    return UserEntityDTOMapper.map(userRepository.save(user));
                 })
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + id));
     }
+
 
 
     @Override

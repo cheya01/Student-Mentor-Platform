@@ -6,11 +6,13 @@ import com.skill_mentor.root.entity.UserEntity;
 import com.skill_mentor.root.repository.UserRepository;
 import com.skill_mentor.root.service.JwtService;
 import com.skill_mentor.root.service.UserService;
+import com.skill_mentor.root.validation.OnCreate;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -42,9 +44,8 @@ public class AuthController {
         return ResponseEntity.ok().body("Bearer " + token);
     }
 
-    @PostMapping("/sign-up")
-    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
-        UserDTO savedUser = userService.createUser(userDTO);
-        return new ResponseEntity<>(savedUser, HttpStatus.OK);
+    @PostMapping
+    public ResponseEntity<UserDTO> createUser(@Validated(OnCreate.class) @RequestBody UserDTO userDTO) {
+        return ResponseEntity.ok(userService.createUser(userDTO));
     }
 }

@@ -6,29 +6,18 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NonNull;
 
-public @Data class StudentDTO {
+@Data
+public class StudentDTO {
     private Integer studentId;
-    private String firstName;
-    private String lastName;
-    @Valid
-    @NotNull(message = "email is mandatory")
-    @NotBlank(message = "email is mandatory")
-    private String email;
-    private String phoneNumber;
-    private String address;
-    private Integer age;
+    private Integer userId;
+    private String college;
+    private String major;
 
-    public StudentDTO(Integer studentId, String firstName, String lastName, String email, String phoneNumber, String address, Integer age) {
+    public StudentDTO() {}
+
+    public StudentDTO(Integer studentId, String college, String major) {
         this.studentId = studentId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
-        this.age = age;
-    }
-
-    public StudentDTO() {
-
+        this.college = college;
+        this.major = major;
     }
 }

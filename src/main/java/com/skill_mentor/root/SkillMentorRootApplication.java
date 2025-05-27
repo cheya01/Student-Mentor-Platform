@@ -11,3 +11,10 @@ public class SkillMentorRootApplication {
 	}
 
 }
+
+// To-Do List
+// student - studentId, user, college, major,
+// mentor
+// classRoom
+// session
+//role based auth

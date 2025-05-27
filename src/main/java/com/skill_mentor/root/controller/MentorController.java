@@ -1,7 +1,7 @@
 package com.skill_mentor.root.controller;
 
-import com.skill_mentor.root.dto.StudentDTO;
-import com.skill_mentor.root.service.StudentService;
+import com.skill_mentor.root.dto.MentorDTO;
+import com.skill_mentor.root.service.MentorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,43 +15,43 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "api/v1/student")
-public class StudentController {
+@RequestMapping(value = "api/v1/mentor")
+public class MentorController {
     @Autowired
-    private StudentService studentService;
+    private MentorService mentorService;
 
     @PostMapping()
-    public ResponseEntity<StudentDTO> createStudent(@Valid @RequestBody StudentDTO studentDTO) {
-        StudentDTO savedStudent = studentService.createStudent(studentDTO);
-        return new ResponseEntity<>(savedStudent, HttpStatus.OK);
+    public ResponseEntity<MentorDTO> createMentor(@Valid @RequestBody MentorDTO mentorDTO) {
+        MentorDTO savedMentor = mentorService.createMentor(mentorDTO);
+        return new ResponseEntity<>(savedMentor, HttpStatus.OK);
     }
 
     @GetMapping()
-    public ResponseEntity<List<StudentDTO>> getAllStudents(@RequestParam(required = false) String city,
+    public ResponseEntity<List<MentorDTO>> getAllMentors(@RequestParam(required = false) String city,
                                                            @RequestParam(required = false) Integer age) {
-        List<StudentDTO> studentDTOs = studentService.getAllStudents(city, age);
-        return new ResponseEntity<>(studentDTOs, HttpStatus.OK);
+        List<MentorDTO> mentorDTOs = mentorService.getAllMentors();
+        return new ResponseEntity<>(mentorDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StudentDTO> getStudentById(@PathVariable Integer id) {
-        StudentDTO student = studentService.getStudentById(id);
-        return new ResponseEntity<>(student, HttpStatus.OK);
+    public ResponseEntity<MentorDTO> getMentorById(@PathVariable Integer id) {
+        MentorDTO mentor = mentorService.getMentorById(id);
+        return new ResponseEntity<>(mentor, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<StudentDTO> updateStudentById(@PathVariable Integer id, @Valid @RequestBody StudentDTO studentDTO) {
-        StudentDTO updatedStudent = studentService.updateStudentById(id, studentDTO);
-        if (updatedStudent != null) {
-            return new ResponseEntity<>(updatedStudent, HttpStatus.OK);
+    public ResponseEntity<MentorDTO> updateMentorById(@PathVariable Integer id, @Valid @RequestBody MentorDTO mentorDTO) {
+        MentorDTO updatedMentor = mentorService.updateMentorById(id, mentorDTO);
+        if (updatedMentor != null) {
+            return new ResponseEntity<>(updatedMentor, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteStudentById(@PathVariable Integer id) {
-        boolean isDeleted = studentService.deleteStudentById(id);
+    public ResponseEntity<Void> deleteMentorById(@PathVariable Integer id) {
+        boolean isDeleted = mentorService.deleteMentorById(id);
         if (isDeleted) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -71,4 +71,3 @@ public class StudentController {
         return errors;
     }
 }
-
