@@ -17,4 +17,8 @@ public class SkillMentorRootApplication {
 // mentor
 // classRoom
 // session
-//role based auth
+// role based auth
+// swagger
+// logs
+// actuator
+

@@ -17,8 +17,14 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "api/v1/mentor")
 public class MentorController {
+
+    private final MentorService mentorService;
+
+    // Constructor injection (recommended)
     @Autowired
-    private MentorService mentorService;
+    public MentorController(MentorService mentorService) {
+        this.mentorService = mentorService;
+    }
 
     @PostMapping()
     public ResponseEntity<MentorDTO> createMentor(@Valid @RequestBody MentorDTO mentorDTO) {
@@ -28,7 +34,7 @@ public class MentorController {
 
     @GetMapping()
     public ResponseEntity<List<MentorDTO>> getAllMentors(@RequestParam(required = false) String city,
-                                                           @RequestParam(required = false) Integer age) {
+                                                         @RequestParam(required = false) Integer age) {
         List<MentorDTO> mentorDTOs = mentorService.getAllMentors();
         return new ResponseEntity<>(mentorDTOs, HttpStatus.OK);
     }
@@ -54,11 +60,11 @@ public class MentorController {
         boolean isDeleted = mentorService.deleteMentorById(id);
         if (isDeleted) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        else {
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -71,3 +77,4 @@ public class MentorController {
         return errors;
     }
 }
+
