@@ -12,6 +12,7 @@ public class StudentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "student_id")
     private Integer studentId;
 
     @OneToOne(fetch = FetchType.LAZY)

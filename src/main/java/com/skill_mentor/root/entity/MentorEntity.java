@@ -12,6 +12,7 @@ public class MentorEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "mentor_id")
     private Integer mentorId;
 
     @OneToOne(fetch = FetchType.LAZY)
