@@ -2,11 +2,13 @@ package com.skill_mentor.root.controller;
 
 import com.skill_mentor.root.dto.UserDTO;
 import com.skill_mentor.root.service.UserService;
+import com.skill_mentor.root.validation.OnUpdate;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,13 +37,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUserById(@PathVariable Integer id, @Valid @RequestBody UserDTO userDTO) {
-        UserDTO updatedUser = userService.updateUserById(id, userDTO);
-        if (updatedUser != null) {
-            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<UserDTO> updateUserById(@PathVariable Integer id,
+                                              @Validated(OnUpdate.class) @RequestBody UserDTO userDTO) {
+        return ResponseEntity.ok(userService.updateUserById(id, userDTO));
     }
 
     @DeleteMapping("/{id}")

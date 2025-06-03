@@ -17,7 +17,6 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "api/v1/student")
 public class StudentController {
-    private static int count = 0;
     @Autowired
     private StudentService studentService;
 
