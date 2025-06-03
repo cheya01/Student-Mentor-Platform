@@ -40,6 +40,6 @@ public class ClassRoomEntity {
     @JoinColumn(name = "mentor_id", nullable = false)
     private MentorEntity mentor;
 
-    @OneToMany(mappedBy = "classRoomEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "classRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<SessionEntity> sessionEntityList = new ArrayList<>();
 }
