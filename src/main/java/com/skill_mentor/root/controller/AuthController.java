@@ -15,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -40,9 +42,10 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Invalid credentials");
         }
 
-        String token = jwtService.generateToken(user.getEmail());
-        return ResponseEntity.ok().body("Bearer " + token);
+        String token = jwtService.generateToken(user);
+        return ResponseEntity.ok().body(Map.of("token", token, "role", user.getRole().getRole()));
     }
+
 
     @PostMapping
     public ResponseEntity<UserDTO> createUser(@Validated(OnCreate.class) @RequestBody UserDTO userDTO) {
