@@ -27,12 +27,19 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/user").authenticated() // GET users
+                        .requestMatchers(HttpMethod.POST, "/api/v1/user").hasRole("VISITOR")
+
+                        .requestMatchers("/api/v1/user/**").hasAnyRole("ADMIN", "MENTOR", "STUDENT")
+                        .requestMatchers("/api/v1/session/end/**").hasAnyRole("ADMIN", "MENTOR")
+                        .requestMatchers("/api/v1/session/**").hasAnyRole("ADMIN", "MENTOR")
+                        .requestMatchers("/api/v1/classroom/**").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
 
 
     @Bean

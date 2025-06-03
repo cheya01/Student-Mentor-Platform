@@ -13,10 +13,11 @@ public class SkillMentorRootApplication {
 }
 
 // To-Do List
-// student - studentId, user, college, major, done
-// mentor done
-// classRoom done
-// session sessionId classRoomId studentId mentorId startTime endTime topic link fee
+
+// student - studentId, user, college, major, (done)
+// mentor (done)
+// classRoom (done)
+// session sessionId classRoomId studentId mentorId startTime endTime topic link fee status (done)
 // role based auth
 // swagger
 // logs
