@@ -20,8 +20,12 @@ import java.util.Map;
 @RequestMapping(value = "api/v1/user")
 public class UserController {
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping()
     public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam(required = false) String role,

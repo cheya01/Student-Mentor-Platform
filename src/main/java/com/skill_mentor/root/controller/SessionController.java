@@ -12,8 +12,12 @@ import java.util.List;
 @RequestMapping("api/v1/session")
 public class SessionController {
 
+    private final SessionService sessionService;
+
     @Autowired
-    private SessionService sessionService;
+    public SessionController(SessionService sessionService) {
+        this.sessionService = sessionService;
+    }
 
     @PostMapping()
     public ResponseEntity<SessionDTO> createSession(@RequestBody SessionDTO dto) {

@@ -20,7 +20,6 @@ public class MentorController {
 
     private final MentorService mentorService;
 
-    // Constructor injection (recommended)
     @Autowired
     public MentorController(MentorService mentorService) {
         this.mentorService = mentorService;
@@ -33,8 +32,7 @@ public class MentorController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<MentorDTO>> getAllMentors(@RequestParam(required = false) String city,
-                                                         @RequestParam(required = false) Integer age) {
+    public ResponseEntity<List<MentorDTO>> getAllMentors() {
         List<MentorDTO> mentorDTOs = mentorService.getAllMentors();
         return new ResponseEntity<>(mentorDTOs, HttpStatus.OK);
     }

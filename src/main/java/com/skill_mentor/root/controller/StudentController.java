@@ -17,8 +17,12 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "api/v1/student")
 public class StudentController {
+    private final StudentService studentService;
+
     @Autowired
-    private StudentService studentService;
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
+    }
 
     @PostMapping()
     public ResponseEntity<StudentDTO> createStudent(@Valid @RequestBody StudentDTO studentDTO) {
@@ -27,9 +31,8 @@ public class StudentController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<StudentDTO>> getAllStudents(@RequestParam(required = false) String city,
-                                                           @RequestParam(required = false) Integer age) {
-        List<StudentDTO> studentDTOs = studentService.getAllStudents(city, age);
+    public ResponseEntity<List<StudentDTO>> getAllStudents() {
+        List<StudentDTO> studentDTOs = studentService.getAllStudents();
         return new ResponseEntity<>(studentDTOs, HttpStatus.OK);
     }
 
