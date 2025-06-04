@@ -11,6 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -23,19 +27,24 @@ public class UserServiceimpl implements UserService {
     @Autowired
     private RoleRepository roleRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceimpl.class);
+
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
-        String hashedPassword = passwordEncoder.encode(userDTO.getPasswordHash());
-        userDTO.setPasswordHash(hashedPassword);
-
-        RoleEntity role = roleRepository.findById(userDTO.getRoleId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid role ID"));
-
-        UserEntity userEntity = UserEntityDTOMapper.map(userDTO, role);
-        UserEntity savedEntity = userRepository.save(userEntity);
-
-        return UserEntityDTOMapper.map(savedEntity);
+        logger.info("Creating user with email: {}", userDTO.getEmail());
+        try {
+            String hashedPassword = passwordEncoder.encode(userDTO.getPasswordHash());
+            userDTO.setPasswordHash(hashedPassword);
+            RoleEntity role = roleRepository.findById(userDTO.getRoleId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid role ID"));
+            UserEntity userEntity = UserEntityDTOMapper.map(userDTO, role);
+            UserEntity savedEntity = userRepository.save(userEntity);
+            return UserEntityDTOMapper.map(savedEntity);
+        } catch (Exception e) {
+            logger.error("Error while creating user", e);
+            return null;
+        }
     }
 
     @Override
