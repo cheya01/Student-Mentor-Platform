@@ -20,7 +20,8 @@ public class SkillMentorRootApplication {
 // session sessionId classRoomId studentId mentorId startTime endTime topic link fee status (done)
 // role based auth (done)
 // swagger
-// logs (done)
+// logs ()
+// POST api/v1/user no use
 // actuator
 // mentor payment endpoint
 // redis

@@ -7,6 +7,8 @@ import com.skill_mentor.root.mapper.MentorEntityDTOMapper;
 import com.skill_mentor.root.repository.MentorRepository;
 import com.skill_mentor.root.repository.UserRepository;
 import com.skill_mentor.root.service.MentorService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,52 +17,82 @@ import java.util.List;
 @Service
 public class MentorServiceimpl implements MentorService {
 
-    @Autowired
-    private MentorRepository mentorRepository;
+    private final MentorRepository mentorRepository;
+    private final UserRepository userRepository;
+    private static final Logger logger = LoggerFactory.getLogger(MentorServiceimpl.class);
 
     @Autowired
-    private UserRepository userRepository;
+    public MentorServiceimpl(MentorRepository mentorRepository, UserRepository userRepository) {
+        this.mentorRepository = mentorRepository;
+        this.userRepository = userRepository;
+    }
 
     @Override
     public MentorDTO createMentor(MentorDTO mentorDTO) {
-        UserEntity user = userRepository.findById(mentorDTO.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
+        logger.info("Creating mentor with userId: {}", mentorDTO.getUserId());
+        try {
+            UserEntity user = userRepository.findById(mentorDTO.getUserId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
 
-        MentorEntity mentorEntity = MentorEntityDTOMapper.map(mentorDTO, user);
-        MentorEntity savedEntity = mentorRepository.save(mentorEntity);
-        return MentorEntityDTOMapper.map(savedEntity);
+            MentorEntity mentorEntity = MentorEntityDTOMapper.map(mentorDTO, user);
+            MentorEntity savedEntity = mentorRepository.save(mentorEntity);
+            return MentorEntityDTOMapper.map(savedEntity);
+        } catch (Exception e) {
+            logger.error("Error while creating mentor", e);
+            return null;
+        }
     }
 
     @Override
     public List<MentorDTO> getAllMentors() {
-        return mentorRepository.findAll().stream()
-                .map(MentorEntityDTOMapper::map)
-                .toList();
+        logger.info("Getting all mentors");
+        try{
+            return mentorRepository.findAll().stream()
+                    .map(MentorEntityDTOMapper::map)
+                    .toList();
+        } catch (Exception e) {
+            logger.error("Error while getting mentors", e);
+            return null;
+        }
     }
 
     @Override
     public MentorDTO getMentorById(Integer id) {
-        return mentorRepository.findById(id)
-                .map(MentorEntityDTOMapper::map)
-                .orElse(null);
+        logger.info("Getting mentor with id: {}", id);
+        try{
+            return mentorRepository.findById(id)
+                    .map(MentorEntityDTOMapper::map)
+                    .orElse(null);
+        } catch (Exception e) {
+            logger.error("Error while getting mentor", e);
+            return null;
+        }
     }
 
     @Override
     public MentorDTO updateMentorById(Integer id, MentorDTO mentorDTO) {
-        return mentorRepository.findById(id)
-                .map(existing -> {
-                    existing.setProfession(mentorDTO.getProfession());
-                    existing.setSubject(mentorDTO.getSubject());
-                    return MentorEntityDTOMapper.map(mentorRepository.save(existing));
-                }).orElse(null);
+        logger.info("Updating mentor with id: {}", id);
+        try{
+            return mentorRepository.findById(id)
+                    .map(existing -> {
+                        existing.setProfession(mentorDTO.getProfession());
+                        existing.setSubject(mentorDTO.getSubject());
+                        return MentorEntityDTOMapper.map(mentorRepository.save(existing));
+                    }).orElse(null);
+        } catch (Exception e) {
+            logger.error("Error while updating mentor", e);
+            return null;
+        }
     }
 
     @Override
     public boolean deleteMentorById(Integer id) {
+        logger.info("Deleting mentor with id: {}", id);
         if (mentorRepository.existsById(id)) {
             mentorRepository.deleteById(id);
             return true;
         }
+        logger.info("Mentor with id: {} not found", id);
         return false;
     }
 }
