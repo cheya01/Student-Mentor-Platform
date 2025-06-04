@@ -41,6 +41,11 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @PostMapping("/sign-up")
+    public ResponseEntity<UserDTO> createUser(@Validated(OnCreate.class) @RequestBody UserDTO userDTO) {
+        return ResponseEntity.ok(userService.createUser(userDTO));
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDTO loginRequest) {
         logger.debug("Attempt login for email: {}", loginRequest.getEmail());
@@ -64,12 +69,5 @@ public class AuthController {
             logger.error("Unexpected error during login for email: {}", loginRequest.getEmail(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error");
         }
-    }
-
-
-
-    @PostMapping("/sign-up")
-    public ResponseEntity<UserDTO> createUser(@Validated(OnCreate.class) @RequestBody UserDTO userDTO) {
-        return ResponseEntity.ok(userService.createUser(userDTO));
     }
 }
