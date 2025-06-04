@@ -17,8 +17,12 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "api/v1/student")
 public class StudentController {
+    private final StudentService studentService;
+
     @Autowired
-    private StudentService studentService;
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
+    }
 
     @PostMapping()
     public ResponseEntity<StudentDTO> createStudent(@Valid @RequestBody StudentDTO studentDTO) {

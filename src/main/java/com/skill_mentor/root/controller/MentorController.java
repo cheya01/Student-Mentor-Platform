@@ -20,7 +20,6 @@ public class MentorController {
 
     private final MentorService mentorService;
 
-    // Constructor injection (recommended)
     @Autowired
     public MentorController(MentorService mentorService) {
         this.mentorService = mentorService;
