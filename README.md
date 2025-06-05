@@ -7,18 +7,32 @@ A Spring Boot REST API built for managing an educational platform where students
 
 
 🚀 Features
+
 ✅ JWT-Based Authentication
+
 ✅ Role-Based Authorization (ADMIN, MENTOR, STUDENT, VISITOR)
+
 ✅ CRUD operations for Users, Mentors, Students, Sessions, and Classrooms
+
 ✅ Mentor Earnings Reports (filtered by date range)
+
 ✅ Session Fee Calculation
+
 ✅ Redis Caching for expensive queries like getAllUsers
+
 ✅ Validation Groups for contextual field validation
+
 ✅ Swagger UI documentation with OpenAPI spec
+
 ✅ Centralized Global Exception Handling
+
 ✅ Logging with SLF4J & Logback
+
 ✅ Actuator Integration (health checks, metrics)
+
 ✅ MySQL as the primary database
+
+
 
 | Tech              | Description                      |
 | ----------------- | -------------------------------- |
@@ -35,6 +49,7 @@ A Spring Boot REST API built for managing an educational platform where students
 
 
 📡 API Endpoints
+
 Auth
 POST /api/v1/auth/sign-up — Sign up
 
