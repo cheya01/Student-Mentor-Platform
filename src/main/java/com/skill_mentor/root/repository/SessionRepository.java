@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 public interface SessionRepository extends JpaRepository<SessionEntity, Integer> {
     @Query("SELECT COALESCE(SUM(s.fee), 0) FROM SessionEntity s " +
             "WHERE s.mentor.id = :mentorId " +
-            "AND s.endTime BETWEEN :start AND :end")
+            "AND s.endTime BETWEEN :start AND :end " +
+            "AND s.status = 'FINISHED'")
     Double getTotalEarningsByMentorIdAndDateRange(
             @Param("mentorId") Integer mentorId,
             @Param("start") LocalDateTime start,

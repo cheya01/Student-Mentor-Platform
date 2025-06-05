@@ -24,6 +24,6 @@ public class SkillMentorRootApplication {
 // swagger (done)
 // logs (done)
 // actuator
-// mentor payment endpoint (need to test)
+// mentor payment endpoint (need to test) ---- only session rows with status FINISHED (done)
 // redis (done)
 
