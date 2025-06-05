@@ -1,4 +1,6 @@
 📚 Student-Mentor Platform API
+
+
 A Spring Boot REST API built for managing an educational platform where students and mentors can connect, schedule sessions, track performance, and manage roles — all while following modern best practices in security, caching, and scalability.
 
 ![API Architecture Overview for Student Platform](https://github.com/user-attachments/assets/47a018ca-be29-41b9-846a-fa9fa6b040d3)
