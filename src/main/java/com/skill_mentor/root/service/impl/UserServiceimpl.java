@@ -8,6 +8,8 @@ import com.skill_mentor.root.repository.RoleRepository;
 import com.skill_mentor.root.repository.UserRepository;
 import com.skill_mentor.root.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -66,6 +68,7 @@ public class UserServiceimpl implements UserService {
 
 
     @Override
+    @Cacheable(value = "usersCache")
     public List<UserDTO> getAllUsers(String roleName, Boolean isActive) {
         logger.info("Retrieving all users");
         try{
@@ -105,6 +108,7 @@ public class UserServiceimpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "usersCache", allEntries = true)
     public UserDTO updateUserById(Integer id, UserDTO userDTO) {
         logger.info("Updating user with id: {}", id);
         try {

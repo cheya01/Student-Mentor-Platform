@@ -2,8 +2,10 @@ package com.skill_mentor.root;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 
 @SpringBootApplication
+@EnableCaching
 public class SkillMentorRootApplication {
 
 	public static void main(String[] args) {
@@ -22,6 +24,6 @@ public class SkillMentorRootApplication {
 // swagger (done)
 // logs (done)
 // actuator
-// mentor payment endpoint
-// redis
+// mentor payment endpoint (need to test) ---- only session rows with status FINISHED (done)
+// redis (done)
 

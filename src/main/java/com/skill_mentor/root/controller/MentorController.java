@@ -4,12 +4,14 @@ import com.skill_mentor.root.dto.MentorDTO;
 import com.skill_mentor.root.service.MentorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +64,23 @@ public class MentorController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/{mentorId}/earnings")
+    public ResponseEntity<Map<String, Object>> getMentorEarnings(
+            @PathVariable Integer mentorId,
+            @RequestParam("start_date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam("end_date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+
+        Double total = mentorService.getTotalEarnings(mentorId, startDate, endDate);
+        Map<String, Object> response = Map.of(
+                "mentorId", mentorId,
+                "startDate", startDate,
+                "endDate", endDate,
+                "totalEarnings", total
+        );
+        return ResponseEntity.ok(response);
+    }
+
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
