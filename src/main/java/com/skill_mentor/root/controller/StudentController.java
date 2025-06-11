@@ -46,9 +46,6 @@ public class StudentController {
                 logger.warn("Admin tried to create student without userId.");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
             }
-        } else {
-            logger.warn("Unauthorized role {} attempted to create student", currentUser.getRole().getRole());
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Your role is not permitted to create a student.");
         }
 
         StudentDTO savedStudent = studentService.createStudent(studentDTO);
@@ -71,6 +68,7 @@ public class StudentController {
         UserEntity currentUser = HelperMethods.getCurrentUser();
         if (currentUser.getRole().getRole().equals("STUDENT") &&
                 !Objects.equals(student.getUserId(), currentUser.getUserId())) {
+            logger.warn("User {} retrieving student {} failed", currentUser.getEmail(), id);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         logger.info("User {} retrieving student {}", currentUser.getEmail(), id);
@@ -84,6 +82,7 @@ public class StudentController {
 
         if (currentUser.getRole().getRole().equals("STUDENT") &&
                 !Objects.equals(existing.getUserId(), currentUser.getUserId())) {
+            logger.warn("User {} updating student {} failed", currentUser.getEmail(), id);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 

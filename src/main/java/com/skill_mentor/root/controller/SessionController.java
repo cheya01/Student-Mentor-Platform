@@ -47,9 +47,6 @@ public class SessionController {
                 logger.warn("Admin tried to create session without mentorId.");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
             }
-        } else {
-            logger.warn("Unauthorized role {} attempted to create session", currentUser.getRole().getRole());
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Your role is not permitted to create a session.");
         }
 
         SessionDTO savedSession = sessionService.createSession(sessionDTO);
@@ -61,11 +58,6 @@ public class SessionController {
     public ResponseEntity<List<SessionDTO>> getAllSessions() {
         UserEntity currentUser = HelperMethods.getCurrentUser();
 
-        if (currentUser.getRole().getRole().equals("ADMIN")) {
-            logger.info("User {} retrieving all sessions", currentUser.getEmail());
-            return ResponseEntity.ok(sessionService.getAllSessions());
-        }
-
         if (currentUser.getRole().getRole().equals("MENTOR")) {
             MentorEntity mentor = mentorRepository.findByUser_UserId(currentUser.getUserId())
                     .orElseThrow(() -> new RuntimeException("Mentor profile not found"));
@@ -73,8 +65,8 @@ public class SessionController {
             return ResponseEntity.ok(sessionService.getSessionsByMentorId(mentor.getMentorId()));
         }
 
-        logger.warn("something went wrong while retrieving all sessions");
-        return ResponseEntity.status(403).build();
+        logger.info("User {} retrieving all sessions", currentUser.getEmail());
+        return ResponseEntity.ok(sessionService.getAllSessions());
     }
 
     @GetMapping("/{id}")
@@ -82,23 +74,18 @@ public class SessionController {
         UserEntity currentUser = HelperMethods.getCurrentUser();
         SessionDTO session = sessionService.getSessionById(id);
 
-        if (currentUser.getRole().getRole().equals("ADMIN")) {
-            logger.info("User {} retrieving session {}", currentUser.getEmail(), id);
-            return ResponseEntity.ok(session);
-        }
-
         if (currentUser.getRole().getRole().equals("MENTOR")) {
             MentorEntity mentor = mentorRepository.findByUser_UserId(currentUser.getUserId())
                     .orElseThrow(() -> new RuntimeException("Mentor profile not found"));
 
-            if (session.getMentorId().equals(mentor.getMentorId())) {
-                logger.info("User {} retrieving session {}", currentUser.getEmail(), id);
-                return ResponseEntity.ok(session);
+            if (!session.getMentorId().equals(mentor.getMentorId())) {
+                logger.warn("Unauthorized session access by mentor {}", currentUser.getEmail());
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
         }
 
-        logger.warn("something went wrong while retrieving session by ID");
-        return ResponseEntity.status(403).build();
+        logger.info("User {} retrieving session {}", currentUser.getEmail(), id);
+        return ResponseEntity.ok(session);
     }
 
     @DeleteMapping("/{id}")
@@ -106,27 +93,20 @@ public class SessionController {
         UserEntity currentUser = HelperMethods.getCurrentUser();
         SessionDTO session = sessionService.getSessionById(id);
 
-        if (currentUser.getRole().getRole().equals("ADMIN")) {
-            logger.info("User {} deleting session {}", currentUser.getEmail(), id);
-            return sessionService.deleteSessionById(id)
-                    ? ResponseEntity.noContent().build()
-                    : ResponseEntity.notFound().build();
-        }
-
         if (currentUser.getRole().getRole().equals("MENTOR")) {
             MentorEntity mentor = mentorRepository.findByUser_UserId(currentUser.getUserId())
                     .orElseThrow(() -> new RuntimeException("Mentor profile not found"));
 
-            if (session.getMentorId().equals(mentor.getMentorId())) {
-                logger.info("User {} deleting session {}", currentUser.getEmail(), id);
-                return sessionService.deleteSessionById(id)
-                        ? ResponseEntity.noContent().build()
-                        : ResponseEntity.notFound().build();
+            if (!session.getMentorId().equals(mentor.getMentorId())) {
+                logger.warn("Unauthorized session delete attempt by mentor {}", currentUser.getEmail());
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
         }
 
-        logger.warn("something went wrong while deleting session {}", id);
-        return ResponseEntity.status(403).build();
+        logger.info("User {} deleting session {}", currentUser.getEmail(), id);
+        return sessionService.deleteSessionById(id)
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
     }
 
     @PutMapping("/end/{id}")
@@ -134,23 +114,18 @@ public class SessionController {
         UserEntity currentUser = HelperMethods.getCurrentUser();
         SessionDTO session = sessionService.getSessionById(id);
 
-        if (currentUser.getRole().getRole().equals("ADMIN")) {
-            logger.info("User {} ending session {}", currentUser.getEmail(), id);
-            return ResponseEntity.ok(sessionService.endSession(id));
-        }
-
         if (currentUser.getRole().getRole().equals("MENTOR")) {
             MentorEntity mentor = mentorRepository.findByUser_UserId(currentUser.getUserId())
                     .orElseThrow(() -> new RuntimeException("Mentor profile not found"));
 
-            if (session.getMentorId().equals(mentor.getMentorId())) {
-                logger.info("User {} ending session {}", currentUser.getEmail(), id);
-                return ResponseEntity.ok(sessionService.endSession(id));
+            if (!session.getMentorId().equals(mentor.getMentorId())) {
+                logger.warn("Unauthorized session end attempt by mentor {}", currentUser.getEmail());
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
         }
 
-        logger.warn("something went wrong while ending session {}", id);
-        return ResponseEntity.status(403).build();
+        logger.info("User {} ending session {}", currentUser.getEmail(), id);
+        return ResponseEntity.ok(sessionService.endSession(id));
     }
 
     @PutMapping("/{id}")
@@ -158,23 +133,37 @@ public class SessionController {
         UserEntity currentUser = HelperMethods.getCurrentUser();
         SessionDTO session = sessionService.getSessionById(id);
 
-        if (currentUser.getRole().getRole().equals("ADMIN")) {
-            logger.info("User {} updating session {}", currentUser.getEmail(), id);
-            return ResponseEntity.ok(sessionService.updateSessionById(id, dto));
-        }
-
         if (currentUser.getRole().getRole().equals("MENTOR")) {
             MentorEntity mentor = mentorRepository.findByUser_UserId(currentUser.getUserId())
                     .orElseThrow(() -> new RuntimeException("Mentor profile not found"));
 
-            if (session.getMentorId().equals(mentor.getMentorId())) {
-                logger.info("User {} updating session {}", currentUser.getEmail(), id);
-                return ResponseEntity.ok(sessionService.updateSessionById(id, dto));
+            if (!session.getMentorId().equals(mentor.getMentorId())) {
+                logger.warn("Unauthorized session update attempt by mentor {}", currentUser.getEmail());
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
         }
 
-        logger.warn("something went wrong while updating session {}", id);
-        return ResponseEntity.status(403).build();
+        logger.info("User {} updating session {}", currentUser.getEmail(), id);
+        return ResponseEntity.ok(sessionService.updateSessionById(id, dto));
+    }
+
+    @GetMapping("/mentor/{mentorId}")
+    public ResponseEntity<List<SessionDTO>> getSessionsByMentorId(@PathVariable Integer mentorId) {
+        UserEntity currentUser = HelperMethods.getCurrentUser();
+
+        // If current user is a mentor, restrict access to only their own mentorId
+        if (currentUser.getRole().getRole().equalsIgnoreCase("MENTOR")) {
+            MentorEntity mentor = mentorRepository.findByUser_UserId(currentUser.getUserId())
+                    .orElseThrow(() -> new RuntimeException("Mentor profile not found"));
+
+            if (!mentor.getMentorId().equals(mentorId)) {
+                logger.warn("Unauthorized session read attempt by mentor {}", currentUser.getEmail());
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            }
+        }
+
+        List<SessionDTO> sessions = sessionService.getSessionsByMentorId(mentorId);
+        return ResponseEntity.ok(sessions);
     }
 }
 

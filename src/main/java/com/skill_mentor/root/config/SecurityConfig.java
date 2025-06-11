@@ -39,6 +39,7 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/v1/session").hasAnyRole("ADMIN", "MENTOR") // only admin and mentor can CRUD sessions
                         .requestMatchers("/api/v1/session/end/**").hasAnyRole("ADMIN", "MENTOR") // only admin and mentor can end sessions
+                        .requestMatchers(HttpMethod.GET, "/api/v1/session/mentor/**").hasAnyRole("ADMIN", "MENTOR")
 
                         .requestMatchers(HttpMethod.POST, "/api/v1/classroom").hasRole("ADMIN") // only admin can manage classrooms
                         .requestMatchers("/api/v1/classroom/**").hasRole("ADMIN") // only admin can manage classrooms
