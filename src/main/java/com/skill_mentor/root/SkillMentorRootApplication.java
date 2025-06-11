@@ -30,6 +30,7 @@ public class SkillMentorRootApplication {
 // check is_active when login (done)
 // role based authorization
 // user-identity-based ownership checks (assumption - a user has only one role)
+// clear error res on sig-up and login
 
 // password validation
 // list sessions by mentor id
