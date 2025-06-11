@@ -45,7 +45,7 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.POST,"/api/v1/student").hasAnyRole("ADMIN", "STUDENT") // only admin and student can create students
                         .requestMatchers(HttpMethod.GET,"/api/v1/student").hasRole("ADMIN") // only admin can get all students
-                        .requestMatchers(HttpMethod.GET,"/api/v1/student/**").hasRole("ADMIN") // only admin can get student by id
+                        .requestMatchers(HttpMethod.GET,"/api/v1/student/**").hasRole("ADMIN") // only admin can get student by id...this need mod
                         .requestMatchers(HttpMethod.PUT,"/api/v1/student/**").hasAnyRole("ADMIN", "STUDENT") // only admin and student can update student by id
                         .requestMatchers(HttpMethod.DELETE,"/api/v1/student/**").hasRole("ADMIN") // only admin can delete student
 

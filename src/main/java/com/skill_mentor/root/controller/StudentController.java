@@ -1,7 +1,10 @@
 package com.skill_mentor.root.controller;
 
 import com.skill_mentor.root.dto.StudentDTO;
+import com.skill_mentor.root.entity.UserEntity;
 import com.skill_mentor.root.service.StudentService;
+import com.skill_mentor.root.service.UserService;
+import com.skill_mentor.root.util.HelperMethods;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +29,10 @@ public class StudentController {
 
     @PostMapping()
     public ResponseEntity<StudentDTO> createStudent(@Valid @RequestBody StudentDTO studentDTO) {
+        UserEntity currentUser = HelperMethods.getCurrentUser();
+        if (currentUser.getRole().getRole().equals("STUDENT")) { // Force student to only create their own record
+            studentDTO.setUserId(currentUser.getUserId());
+        }
         StudentDTO savedStudent = studentService.createStudent(studentDTO);
         return new ResponseEntity<>(savedStudent, HttpStatus.OK);
     }

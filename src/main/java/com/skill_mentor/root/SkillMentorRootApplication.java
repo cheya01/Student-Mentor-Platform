@@ -23,7 +23,14 @@ public class SkillMentorRootApplication {
 // role based auth (done)
 // swagger (done)
 // logs (done)
-// actuator
+// actuator (later)
 // mentor payment endpoint (need to test) ---- only session rows with status FINISHED (done)
 // redis (done)
 
+// check is_active when login
+// role based authorization
+// user-identity-based ownership checks (assumption - a user has only one role)
+
+// password validation
+// list sessions by mentor id
+// google auth
