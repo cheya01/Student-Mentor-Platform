@@ -27,7 +27,7 @@ public class SkillMentorRootApplication {
 // mentor payment endpoint (need to test) ---- only session rows with status FINISHED (done)
 // redis (done)
 
-// check is_active when login
+// check is_active when login (done)
 // role based authorization
 // user-identity-based ownership checks (assumption - a user has only one role)
 

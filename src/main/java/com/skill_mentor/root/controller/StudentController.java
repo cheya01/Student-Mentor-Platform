@@ -6,6 +6,8 @@ import com.skill_mentor.root.service.StudentService;
 import com.skill_mentor.root.service.UserService;
 import com.skill_mentor.root.util.HelperMethods;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import java.util.Map;
 @RequestMapping(value = "api/v1/student")
 public class StudentController {
     private final StudentService studentService;
+    private static final Logger logger = LoggerFactory.getLogger(StudentController.class);
 
     @Autowired
     public StudentController(StudentService studentService) {
@@ -28,14 +31,29 @@ public class StudentController {
     }
 
     @PostMapping()
-    public ResponseEntity<StudentDTO> createStudent(@Valid @RequestBody StudentDTO studentDTO) {
+    public ResponseEntity<?> createStudent(@Valid @RequestBody StudentDTO studentDTO) {
         UserEntity currentUser = HelperMethods.getCurrentUser();
-        if (currentUser.getRole().getRole().equals("STUDENT")) { // Force student to only create their own record
+
+        if (currentUser.getRole().getRole().equals("STUDENT")) {
+            // Students can only create their own profile; override any provided userId
             studentDTO.setUserId(currentUser.getUserId());
+
+        } else if (currentUser.getRole().getRole().equals("ADMIN")) {
+            // Admins must provide userId
+            if (studentDTO.getUserId() == null) {
+                String message = "userId is required when creating a student profile as ADMIN.";
+                logger.warn("Admin tried to create student without userId.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+            }
+        } else {
+            logger.warn("Unauthorized role {} attempted to create student", currentUser.getRole().getRole());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Your role is not permitted to create a student.");
         }
+
         StudentDTO savedStudent = studentService.createStudent(studentDTO);
         return new ResponseEntity<>(savedStudent, HttpStatus.OK);
     }
+
 
     @GetMapping()
     public ResponseEntity<List<StudentDTO>> getAllStudents() {
