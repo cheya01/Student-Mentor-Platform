@@ -52,13 +52,16 @@ public class StudentController {
         }
 
         StudentDTO savedStudent = studentService.createStudent(studentDTO);
+        logger.info("User {} creating student {}", currentUser.getEmail(), savedStudent.getStudentId());
         return new ResponseEntity<>(savedStudent, HttpStatus.OK);
     }
 
 
     @GetMapping()
     public ResponseEntity<List<StudentDTO>> getAllStudents() {
+        UserEntity currentUser = HelperMethods.getCurrentUser();
         List<StudentDTO> studentDTOs = studentService.getAllStudents();
+        logger.info("User {} retrieving all students", currentUser.getEmail());
         return new ResponseEntity<>(studentDTOs, HttpStatus.OK);
     }
 
@@ -70,6 +73,7 @@ public class StudentController {
                 !Objects.equals(student.getUserId(), currentUser.getUserId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+        logger.info("User {} retrieving student {}", currentUser.getEmail(), id);
         return new ResponseEntity<>(student, HttpStatus.OK);
     }
 
@@ -83,11 +87,14 @@ public class StudentController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
+        logger.info("User {} updating student {}", currentUser.getEmail(), id);
         return ResponseEntity.ok(studentService.updateStudentById(id, studentDTO));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStudentById(@PathVariable Integer id) {
+        UserEntity currentUser = HelperMethods.getCurrentUser();
+        logger.info("User {} deleting student {}", currentUser.getEmail(), id);
         boolean isDeleted = studentService.deleteStudentById(id);
         if (isDeleted) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -96,6 +103,8 @@ public class StudentController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
