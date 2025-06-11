@@ -75,12 +75,15 @@ public class StudentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<StudentDTO> updateStudentById(@PathVariable Integer id, @Valid @RequestBody StudentDTO studentDTO) {
-        StudentDTO updatedStudent = studentService.updateStudentById(id, studentDTO);
-        if (updatedStudent != null) {
-            return new ResponseEntity<>(updatedStudent, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        StudentDTO existing = studentService.getStudentById(id);
+        UserEntity currentUser = HelperMethods.getCurrentUser();
+
+        if (currentUser.getRole().getRole().equals("STUDENT") &&
+                !Objects.equals(existing.getUserId(), currentUser.getUserId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+
+        return ResponseEntity.ok(studentService.updateStudentById(id, studentDTO));
     }
 
     @DeleteMapping("/{id}")
