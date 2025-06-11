@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(value = "api/v1/student")
@@ -64,6 +65,11 @@ public class StudentController {
     @GetMapping("/{id}")
     public ResponseEntity<StudentDTO> getStudentById(@PathVariable Integer id) {
         StudentDTO student = studentService.getStudentById(id);
+        UserEntity currentUser = HelperMethods.getCurrentUser();
+        if (currentUser.getRole().getRole().equals("STUDENT") &&
+                !Objects.equals(student.getUserId(), currentUser.getUserId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         return new ResponseEntity<>(student, HttpStatus.OK);
     }
 
