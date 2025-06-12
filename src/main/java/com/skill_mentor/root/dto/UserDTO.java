@@ -2,6 +2,7 @@ package com.skill_mentor.root.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.skill_mentor.root.validation.OnCreate;
+import com.skill_mentor.root.validation.ValidPassword;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -31,6 +32,7 @@ public class  UserDTO {
 
     @Valid
     @NotBlank(message = "Password is mandatory")
+    @ValidPassword
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 

@@ -1,2 +1,37 @@
-/logs/
-src/main/resources/application.properties
+# IDE config
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+# Build output
+/target/
+
+# Logs and dumps
+*.log
+logs/
+dump.rdb
+
+# Maven
+.mvn/
+.settings/
+.classpath
+.project
+*.iml
+
+# Redis
+*.rdb
+
+# Env / config
+.env
+*.env
+application-*.yml
+application-*.properties
+
+# Package outputs
+*.jar
+*.war
+
+# Misc
+HELP.md
