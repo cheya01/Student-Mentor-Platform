@@ -39,13 +39,14 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/v1/session").hasAnyRole("ADMIN", "MENTOR") // only admin and mentor can CRUD sessions
                         .requestMatchers("/api/v1/session/end/**").hasAnyRole("ADMIN", "MENTOR") // only admin and mentor can end sessions
+                        .requestMatchers(HttpMethod.GET, "/api/v1/session/mentor/**").hasAnyRole("ADMIN", "MENTOR")
 
                         .requestMatchers(HttpMethod.POST, "/api/v1/classroom").hasRole("ADMIN") // only admin can manage classrooms
                         .requestMatchers("/api/v1/classroom/**").hasRole("ADMIN") // only admin can manage classrooms
 
                         .requestMatchers(HttpMethod.POST,"/api/v1/student").hasAnyRole("ADMIN", "STUDENT") // only admin and student can create students
                         .requestMatchers(HttpMethod.GET,"/api/v1/student").hasRole("ADMIN") // only admin can get all students
-                        .requestMatchers(HttpMethod.GET,"/api/v1/student/**").hasRole("ADMIN") // only admin can get student by id
+                        .requestMatchers(HttpMethod.GET,"/api/v1/student/**").hasAnyRole("ADMIN", "STUDENT") // only admin can get student by id
                         .requestMatchers(HttpMethod.PUT,"/api/v1/student/**").hasAnyRole("ADMIN", "STUDENT") // only admin and student can update student by id
                         .requestMatchers(HttpMethod.DELETE,"/api/v1/student/**").hasRole("ADMIN") // only admin can delete student
 

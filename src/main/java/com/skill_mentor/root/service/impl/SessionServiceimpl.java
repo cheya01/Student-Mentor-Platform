@@ -176,4 +176,12 @@ public class SessionServiceimpl implements SessionService {
             throw e;
         }
     }
+
+    @Override
+    public List<SessionDTO> getSessionsByMentorId(Integer mentorId) {
+        List<SessionEntity> sessions = sessionRepository.findByMentor_MentorId(mentorId);
+        return sessions.stream()
+                .map(SessionEntityDTOMapper::map)
+                .toList();
+    }
 }

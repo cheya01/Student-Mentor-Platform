@@ -54,15 +54,23 @@ public class AuthController {
             UserEntity user = userRepository.findByEmail(loginRequest.getEmail())
                     .orElseThrow(() -> new UsernameNotFoundException("Invalid email or password"));
 
+            // Block inactive accounts
+            if (Boolean.FALSE.equals(user.getIsActive())) {
+                logger.warn("Login attempt for inactive user: {}", loginRequest.getEmail());
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User account is inactive. Please contact admin.");
+            }
+
             if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPasswordHash())) {
+                logger.warn("Invalid password for email: {}", loginRequest.getEmail());
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
             }
 
             String token = jwtService.generateToken(user);
+            logger.info("Login successful for email: {}", loginRequest.getEmail());
             return ResponseEntity.ok().body(Map.of("token", token, "role", user.getRole().getRole()));
 
         } catch (UsernameNotFoundException e) {
-            logger.warn("Login failed for email: {}", loginRequest.getEmail());
+            logger.warn("Login failed - user not found: {}", loginRequest.getEmail());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 
         } catch (Exception e) {
@@ -70,4 +78,5 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error");
         }
     }
+
 }
