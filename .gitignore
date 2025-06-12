@@ -35,3 +35,6 @@ application-*.properties
 
 # Misc
 HELP.md
+
+# keystore file
+keystore.p12

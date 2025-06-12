@@ -36,7 +36,6 @@ public class  UserDTO {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @NotNull(message = "Role ID is mandatory")
     private Integer roleId;  // ID of RoleEntity (e.g. 1=STUDENT, 2=MENTOR, etc.)
 
     private Boolean isActive;
