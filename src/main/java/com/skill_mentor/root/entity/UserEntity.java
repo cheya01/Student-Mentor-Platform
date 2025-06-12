@@ -39,7 +39,7 @@ public class UserEntity  implements UserDetails {
     private String email;
 
     @NotBlank(message = "Password is mandatory")
-    @Column(nullable = false)
+    @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -87,7 +87,7 @@ public class UserEntity  implements UserDetails {
 
     @Override
     public String getPassword() {
-        return "";
+        return passwordHash;
     }
 
     @Override public String getUsername() { return email; }

@@ -60,7 +60,7 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User account is inactive. Please contact admin.");
             }
 
-            if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPasswordHash())) {
+            if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
                 logger.warn("Invalid password for email: {}", loginRequest.getEmail());
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
             }

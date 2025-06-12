@@ -28,10 +28,11 @@ public class SkillMentorRootApplication {
 // redis (done)
 
 // check is_active when login (done)
-// role based authorization
-// user-identity-based ownership checks (assumption - a user has only one role)
-// clear error res on sig-up and login
+// role based authorization (done)
+// user-identity-based ownership checks (assumption - a user has only one role) (done)
+// list sessions by mentor id (done)
 
+// clear error res on sig-up and login
 // password validation
-// list sessions by mentor id
 // google auth
+// https

@@ -41,8 +41,8 @@ public class UserServiceimpl implements UserService {
         logger.info("Creating user with email: {}", userDTO.getEmail());
         try {
             // Encode password
-            String hashedPassword = passwordEncoder.encode(userDTO.getPasswordHash());
-            userDTO.setPasswordHash(hashedPassword);
+            String hashedPassword = passwordEncoder.encode(userDTO.getPassword());
+            userDTO.setPassword(hashedPassword);
 
             // Assign default role if none provided
             Integer roleId = userDTO.getRoleId() != null ? userDTO.getRoleId() : 3;
@@ -120,8 +120,8 @@ public class UserServiceimpl implements UserService {
                             user.setLastName(userDTO.getLastName());
                         if (userDTO.getEmail() != null)
                             user.setEmail(userDTO.getEmail());
-                        if (userDTO.getPasswordHash() != null && !userDTO.getPasswordHash().isBlank())
-                            user.setPasswordHash(passwordEncoder.encode(userDTO.getPasswordHash()));
+                        if (userDTO.getPassword() != null && !userDTO.getPassword().isBlank())
+                            user.setPasswordHash(passwordEncoder.encode(userDTO.getPassword()));
                         if (userDTO.getRoleId() != null)
                             user.setRole(roleRepository.findById(userDTO.getRoleId()).orElseThrow());
                         if (userDTO.getPhoneNumber() != null)
