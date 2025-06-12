@@ -15,7 +15,7 @@ public class UserEntityDTOMapper {
         userDTO.setFirstName(userEntity.getFirstName());
         userDTO.setLastName(userEntity.getLastName());
         userDTO.setEmail(userEntity.getEmail());
-        userDTO.setPasswordHash(userEntity.getPasswordHash()); // write-only
+        userDTO.setPassword(userEntity.getPasswordHash()); // write-only
         userDTO.setRoleId(userEntity.getRole() != null ? userEntity.getRole().getId() : null);
         userDTO.setIsActive(userEntity.getIsActive());
         userDTO.setCreatedAt(userEntity.getCreatedAt());
@@ -35,7 +35,7 @@ public class UserEntityDTOMapper {
         userEntity.setFirstName(userDTO.getFirstName());
         userEntity.setLastName(userDTO.getLastName());
         userEntity.setEmail(userDTO.getEmail());
-        userEntity.setPasswordHash(userDTO.getPasswordHash());
+        userEntity.setPasswordHash(userDTO.getPassword());
         userEntity.setRole(roleEntity);
         userEntity.setIsActive(userDTO.getIsActive());
         userEntity.setCreatedAt(userDTO.getCreatedAt());

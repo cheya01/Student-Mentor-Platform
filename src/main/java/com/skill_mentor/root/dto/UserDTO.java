@@ -32,7 +32,7 @@ public class  UserDTO {
     @Valid
     @NotBlank(message = "Password is mandatory")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String passwordHash;
+    private String password;
 
     @NotNull(message = "Role ID is mandatory")
     private Integer roleId;  // ID of RoleEntity (e.g. 1=STUDENT, 2=MENTOR, etc.)
@@ -52,14 +52,14 @@ public class  UserDTO {
     public UserDTO() {}
 
     // All-args constructor
-    public UserDTO(Integer userId, String firstName, String lastName, String email, String passwordHash,
+    public UserDTO(Integer userId, String firstName, String lastName, String email, String password,
                    Integer roleId, Boolean isActive, LocalDateTime createdAt, LocalDateTime lastLogin,
                    String phoneNumber, String address, String NIC) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.roleId = roleId;
         this.isActive = isActive;
         this.createdAt = createdAt;
