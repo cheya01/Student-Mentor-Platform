@@ -2,13 +2,16 @@ package com.skill_mentor.root.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.skill_mentor.root.validation.OnCreate;
+import com.skill_mentor.root.validation.ValidPassword;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 
 @Data
 public class  UserDTO {
@@ -31,10 +34,10 @@ public class  UserDTO {
 
     @Valid
     @NotBlank(message = "Password is mandatory")
+    @ValidPassword
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @NotNull(message = "Role ID is mandatory")
     private Integer roleId;  // ID of RoleEntity (e.g. 1=STUDENT, 2=MENTOR, etc.)
 
     private Boolean isActive;
@@ -47,6 +50,15 @@ public class  UserDTO {
     private String phoneNumber;
     private String address;
     private String NIC;
+
+    private LocalDate dateOfBirth;
+    private String gender;
+
+    public Integer getAge() {
+        return (dateOfBirth != null)
+                ? Period.between(dateOfBirth, LocalDate.now()).getYears()
+                : null;
+    }
 
     // Default constructor
     public UserDTO() {}

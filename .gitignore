@@ -1,2 +1,43 @@
-/logs/
+# IDE config
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+# Build output
+/target/
+
+# Logs and dumps
+*.log
+logs/
+dump.rdb
+
+# Maven
+.mvn/
+.settings/
+.classpath
+.project
+*.iml
+
+# Redis
+*.rdb
+
+# Env / config
+.env
+*.env
+application-*.yml
+
+# Ignore Spring Boot properties
 src/main/resources/application.properties
+
+
+# Package outputs
+*.jar
+*.war
+
+# Misc
+HELP.md
+
+# keystore file
+keystore.p12

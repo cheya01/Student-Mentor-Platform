@@ -32,7 +32,8 @@ public class SkillMentorRootApplication {
 // user-identity-based ownership checks (assumption - a user has only one role) (done)
 // list sessions by mentor id (done)
 
-// clear error res on sig-up and login
-// password validation
-// google auth
-// https
+// password validation (done)
+// google auth (not possible without a front end)
+// https (done)
+// user age and gender (done)
+// clear error res on sig-up and login (done)

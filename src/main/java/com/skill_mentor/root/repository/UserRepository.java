@@ -14,4 +14,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
     @Query("SELECT u FROM UserEntity u JOIN FETCH u.role")
     List<UserEntity> findAllWithRoles();
+
+    boolean existsByNIC(String nic);
+
 }

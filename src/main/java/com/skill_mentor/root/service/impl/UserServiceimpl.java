@@ -7,11 +7,15 @@ import com.skill_mentor.root.mapper.UserEntityDTOMapper;
 import com.skill_mentor.root.repository.RoleRepository;
 import com.skill_mentor.root.repository.UserRepository;
 import com.skill_mentor.root.service.UserService;
+import com.skill_mentor.root.util.HelperMethods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +56,16 @@ public class UserServiceimpl implements UserService {
 
             RoleEntity role = roleRepository.findById(roleId)
                     .orElseThrow(() -> new IllegalArgumentException("Invalid role ID: " + roleId));
+
+            // check if NIC is unique
+            if (userRepository.existsByNIC(userDTO.getNIC())) {
+                throw new IllegalArgumentException("NIC is already in use.");
+            }
+
+            // extract dob and gender
+            Map<String, Object> nicData = HelperMethods.extractDobAndGenderFromNic(userDTO.getNIC());
+            userDTO.setDateOfBirth((LocalDate) nicData.get("dob"));
+            userDTO.setGender((String) nicData.get("gender"));
 
             // Map and save user
             UserEntity userEntity = UserEntityDTOMapper.map(userDTO, role);
