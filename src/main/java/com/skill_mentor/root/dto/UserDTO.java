@@ -9,7 +9,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 
 @Data
 public class  UserDTO {
@@ -48,6 +50,15 @@ public class  UserDTO {
     private String phoneNumber;
     private String address;
     private String NIC;
+
+    private LocalDate dateOfBirth;
+    private String gender;
+
+    public Integer getAge() {
+        return (dateOfBirth != null)
+                ? Period.between(dateOfBirth, LocalDate.now()).getYears()
+                : null;
+    }
 
     // Default constructor
     public UserDTO() {}

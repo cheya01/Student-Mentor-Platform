@@ -27,7 +27,10 @@ dump.rdb
 .env
 *.env
 application-*.yml
-application-*.properties
+
+# Ignore Spring Boot properties
+src/main/resources/application.properties
+
 
 # Package outputs
 *.jar

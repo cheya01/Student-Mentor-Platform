@@ -23,6 +23,8 @@ public class UserEntityDTOMapper {
         userDTO.setPhoneNumber(userEntity.getPhoneNumber());
         userDTO.setAddress(userEntity.getAddress());
         userDTO.setNIC(userEntity.getNIC());
+        userDTO.setDateOfBirth(userEntity.getDateOfBirth());
+        userDTO.setGender(userEntity.getGender());
         return userDTO;
     }
 
@@ -43,6 +45,8 @@ public class UserEntityDTOMapper {
         userEntity.setPhoneNumber(userDTO.getPhoneNumber());
         userEntity.setAddress(userDTO.getAddress());
         userEntity.setNIC(userDTO.getNIC());
+        userEntity.setDateOfBirth(userDTO.getDateOfBirth());
+        userEntity.setGender(userDTO.getGender());
         return userEntity;
     }
 }

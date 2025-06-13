@@ -35,5 +35,5 @@ public class SkillMentorRootApplication {
 // password validation (done)
 // google auth (not possible without a front end)
 // https (done)
-// student age
+// user age and gender (done)
 // clear error res on sig-up and login

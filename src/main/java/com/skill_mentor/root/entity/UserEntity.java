@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -61,6 +62,12 @@ public class UserEntity  implements UserDetails {
     private String address;
 
     private String NIC;
+
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
+
+    @Column(name = "gender")
+    private String gender;
 
     // Custom constructor (RoleEntity, not Integer)
     public UserEntity(Integer userId, String firstName, String lastName, String email, String passwordHash,
