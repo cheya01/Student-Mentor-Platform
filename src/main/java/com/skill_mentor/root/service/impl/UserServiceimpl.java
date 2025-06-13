@@ -57,6 +57,11 @@ public class UserServiceimpl implements UserService {
             RoleEntity role = roleRepository.findById(roleId)
                     .orElseThrow(() -> new IllegalArgumentException("Invalid role ID: " + roleId));
 
+            // check if NIC is unique
+            if (userRepository.existsByNIC(userDTO.getNIC())) {
+                throw new IllegalArgumentException("NIC is already in use.");
+            }
+
             // extract dob and gender
             Map<String, Object> nicData = HelperMethods.extractDobAndGenderFromNic(userDTO.getNIC());
             userDTO.setDateOfBirth((LocalDate) nicData.get("dob"));

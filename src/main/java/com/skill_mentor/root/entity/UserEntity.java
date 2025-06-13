@@ -61,6 +61,7 @@ public class UserEntity  implements UserDetails {
 
     private String address;
 
+    @Column(name = "nic", nullable = false, unique = true)
     private String NIC;
 
     @Column(name = "date_of_birth")
