@@ -36,22 +36,32 @@ public class StudentController {
         UserEntity currentUser = HelperMethods.getCurrentUser();
 
         if (currentUser.getRole().getRole().equals("STUDENT")) {
-            // Students can only create their own profile; override any provided userId
+            // Prevent students from creating a profile for others
+            if (studentDTO.getUserId() != null && !Objects.equals(studentDTO.getUserId(), currentUser.getUserId())) {
+                logger.warn("Student {} attempted to create profile for another user {}", currentUser.getUserId(), studentDTO.getUserId());
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are only allowed to create your own student profile.");
+            }
+
+            // Force userId to their own ID
             studentDTO.setUserId(currentUser.getUserId());
 
         } else if (currentUser.getRole().getRole().equals("ADMIN")) {
-            // Admins must provide userId
             if (studentDTO.getUserId() == null) {
-                String message = "userId is required when creating a student profile as ADMIN.";
-                logger.warn("Admin tried to create student without userId.");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+                logger.warn("Admin {} tried to create student without userId", currentUser.getUserId());
+                return ResponseEntity.badRequest().body("userId is required when creating a student profile as ADMIN.");
             }
         }
 
         StudentDTO savedStudent = studentService.createStudent(studentDTO);
-        logger.info("User {} creating student {}", currentUser.getEmail(), savedStudent.getStudentId());
-        return new ResponseEntity<>(savedStudent, HttpStatus.OK);
+        if (savedStudent == null) {
+            logger.error("Student creation failed: result is null.");
+            return ResponseEntity.internalServerError().body("Failed to create student profile.");
+        }
+
+        logger.info("User {} created student profile for userId {}", currentUser.getEmail(), savedStudent.getUserId());
+        return ResponseEntity.ok(savedStudent);
     }
+
 
 
     @GetMapping()
@@ -63,32 +73,58 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StudentDTO> getStudentById(@PathVariable Integer id) {
-        StudentDTO student = studentService.getStudentById(id);
+    public ResponseEntity<?> getStudentById(@PathVariable Integer id) {
         UserEntity currentUser = HelperMethods.getCurrentUser();
-        if (currentUser.getRole().getRole().equals("STUDENT") &&
-                !Objects.equals(student.getUserId(), currentUser.getUserId())) {
-            logger.warn("User {} retrieving student {} failed", currentUser.getEmail(), id);
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+        StudentDTO student = studentService.getStudentById(id);
+        if (student == null) {
+            logger.warn("Student with ID {} not found", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student not found");
         }
+
+        if ("STUDENT".equalsIgnoreCase(currentUser.getRole().getRole())) {
+            if (student.getUserId() == null || !Objects.equals(student.getUserId(), currentUser.getUserId())) {
+                logger.warn("Unauthorized access: student {} attempted to access student {}", currentUser.getUserId(), id);
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+            }
+        }
+
         logger.info("User {} retrieving student {}", currentUser.getEmail(), id);
-        return new ResponseEntity<>(student, HttpStatus.OK);
+        return ResponseEntity.ok(student);
     }
+
 
     @PutMapping("/{id}")
-    public ResponseEntity<StudentDTO> updateStudentById(@PathVariable Integer id, @Valid @RequestBody StudentDTO studentDTO) {
-        StudentDTO existing = studentService.getStudentById(id);
+    public ResponseEntity<?> updateStudentById(@PathVariable Integer id, @Valid @RequestBody StudentDTO studentDTO) {
         UserEntity currentUser = HelperMethods.getCurrentUser();
 
-        if (currentUser.getRole().getRole().equals("STUDENT") &&
-                !Objects.equals(existing.getUserId(), currentUser.getUserId())) {
-            logger.warn("User {} updating student {} failed", currentUser.getEmail(), id);
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        StudentDTO existingStudent = studentService.getStudentById(id);
+        if (existingStudent == null) {
+            logger.warn("Student with ID {} not found for update by user {}", id, currentUser.getEmail());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student not found.");
         }
 
-        logger.info("User {} updating student {}", currentUser.getEmail(), id);
-        return ResponseEntity.ok(studentService.updateStudentById(id, studentDTO));
+        if (currentUser.getRole().getRole().equals("STUDENT")) {
+            // Only allow student to update their own profile
+            if (!Objects.equals(existingStudent.getUserId(), currentUser.getUserId())) {
+                logger.warn("Student {} attempted to update another student's profile (studentId: {})", currentUser.getUserId(), id);
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not allowed to update another student's profile.");
+            }
+
+            // Ensure userId in request body is set to current user’s ID
+            studentDTO.setUserId(currentUser.getUserId());
+        }
+
+        StudentDTO updatedStudent = studentService.updateStudentById(id, studentDTO);
+        if (updatedStudent == null) {
+            logger.error("Student update failed for ID {}", id);
+            return ResponseEntity.internalServerError().body("Failed to update student profile.");
+        }
+
+        logger.info("User {} updated student profile ID {}", currentUser.getEmail(), id);
+        return ResponseEntity.ok(updatedStudent);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStudentById(@PathVariable Integer id) {
