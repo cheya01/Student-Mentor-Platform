@@ -37,6 +37,8 @@ public class SkillMentorRootApplication {
 // user age and gender (done)
 // make NIC unique (done)
 // clear error res on sig-up and login (done)
+// supabase migration
+// supabase RLS
 
 // google auth (not possible without a front end)
 
