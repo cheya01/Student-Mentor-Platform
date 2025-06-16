@@ -33,7 +33,12 @@ public class SkillMentorRootApplication {
 // list sessions by mentor id (done)
 
 // password validation (done)
-// google auth (not possible without a front end)
 // https (done)
 // user age and gender (done)
+// make NIC unique (done)
 // clear error res on sig-up and login (done)
+// supabase migration
+// supabase RLS
+
+// google auth (not possible without a front end)
+
