@@ -3,8 +3,10 @@ package com.skill_mentor.root.controller;
 import com.skill_mentor.root.dto.SessionDTO;
 import com.skill_mentor.root.dto.StudentDTO;
 import com.skill_mentor.root.entity.MentorEntity;
+import com.skill_mentor.root.entity.StudentEntity;
 import com.skill_mentor.root.entity.UserEntity;
 import com.skill_mentor.root.repository.MentorRepository;
+import com.skill_mentor.root.repository.StudentRepository;
 import com.skill_mentor.root.service.SessionService;
 import com.skill_mentor.root.util.HelperMethods;
 import jakarta.validation.Valid;
@@ -24,11 +26,13 @@ public class SessionController {
     private final SessionService sessionService;
     private final MentorRepository mentorRepository;
     private static final Logger logger = LoggerFactory.getLogger(SessionController.class);
+    private final StudentRepository studentRepository;
 
     @Autowired
-    public SessionController(SessionService sessionService, MentorRepository mentorRepository) {
+    public SessionController(SessionService sessionService, MentorRepository mentorRepository, StudentRepository studentRepository) {
         this.sessionService = sessionService;
         this.mentorRepository = mentorRepository;
+        this.studentRepository = studentRepository;
     }
 
     @PostMapping()
@@ -163,6 +167,25 @@ public class SessionController {
         }
 
         List<SessionDTO> sessions = sessionService.getSessionsByMentorId(mentorId);
+        return ResponseEntity.ok(sessions);
+    }
+
+    @GetMapping("/student/{studentId}")
+    public ResponseEntity<List<SessionDTO>> getSessionsByStudentId(@PathVariable Integer studentId) {
+        UserEntity currentUser = HelperMethods.getCurrentUser();
+
+        // If current user is a student, restrict access to only their own studentId
+        if (currentUser.getRole().getRole().equalsIgnoreCase("STUDENT")) {
+            StudentEntity student = studentRepository.findByUser_UserId(currentUser.getUserId())
+                    .orElseThrow(() -> new RuntimeException("Student profile not found"));
+
+            if (!student.getStudentId().equals(studentId)) {
+                logger.warn("Unauthorized session read attempt by student {}", currentUser.getEmail());
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            }
+        }
+
+        List<SessionDTO> sessions = sessionService.getSessionsByStudentId(studentId);
         return ResponseEntity.ok(sessions);
     }
 }
