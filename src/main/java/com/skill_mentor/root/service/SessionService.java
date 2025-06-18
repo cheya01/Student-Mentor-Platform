@@ -19,5 +19,7 @@ public interface SessionService {
     SessionDTO updateSessionById(Integer id, SessionDTO dto);
 
     List<SessionDTO> getSessionsByMentorId(Integer mentorId);
+
+    List<SessionDTO> getSessionsByStudentId(Integer mentorId);
 }
 

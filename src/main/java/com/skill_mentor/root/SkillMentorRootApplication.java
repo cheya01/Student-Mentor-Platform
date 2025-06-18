@@ -37,8 +37,17 @@ public class SkillMentorRootApplication {
 // user age and gender (done)
 // make NIC unique (done)
 // clear error res on sig-up and login (done)
-// supabase migration
-// supabase RLS
+// supabase migration (done)
+
+// list sessions by student id (done)
+// jason property seen eka hadanna (done)
+// last login case (done)
+
+// learn CI/CD on hex coder
+// render deployment with CI/CD
+// sonar cube (done)
+// jenkins
+// veracode
 
 // google auth (not possible without a front end)
 

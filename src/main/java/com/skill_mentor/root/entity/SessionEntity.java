@@ -16,6 +16,7 @@ public class SessionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "session_id")
     private Integer sessionId;
 
     @ManyToOne
@@ -35,6 +36,7 @@ public class SessionEntity {
 
     private String topic;
 
+    @Column(name = "start_time", nullable = false)
     private LocalDateTime startTime;
 
     @Column(name = "end_time", nullable = true)

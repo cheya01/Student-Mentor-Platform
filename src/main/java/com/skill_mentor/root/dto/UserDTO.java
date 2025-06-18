@@ -33,8 +33,8 @@ public class  UserDTO {
     private String email;
 
     @Valid
-    @NotBlank(message = "Password is mandatory")
     @ValidPassword
+    @NotBlank(message = "Password is mandatory")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 

@@ -184,4 +184,12 @@ public class SessionServiceimpl implements SessionService {
                 .map(SessionEntityDTOMapper::map)
                 .toList();
     }
+
+    @Override
+    public List<SessionDTO> getSessionsByStudentId(Integer studentId) {
+        List<SessionEntity> sessions = sessionRepository.findByMentor_MentorId(studentId);
+        return sessions.stream()
+                .map(SessionEntityDTOMapper::map)
+                .toList();
+    }
 }

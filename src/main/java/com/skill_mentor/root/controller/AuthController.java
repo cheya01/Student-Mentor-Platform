@@ -20,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -64,6 +65,10 @@ public class AuthController {
                 logger.warn("Invalid password for email: {}", loginRequest.getEmail());
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
             }
+
+            // Update last_login on successful login
+            user.setLastLogin(LocalDateTime.now());
+            userRepository.save(user);
 
             String token = jwtService.generateToken(user);
             logger.info("Login successful for email: {}", loginRequest.getEmail());
