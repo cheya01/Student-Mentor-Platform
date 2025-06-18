@@ -24,14 +24,15 @@ public class UserEntity  implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Integer userId;
 
     @NotBlank(message = "First name is mandatory")
-    @Column(nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @NotBlank(message = "Last name is mandatory")
-    @Column(nullable = false)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
     @Email(message = "Email should be valid")
@@ -47,18 +48,21 @@ public class UserEntity  implements UserDetails {
     @JoinColumn(name = "role_id", nullable = false)
     private RoleEntity role;
 
-    @Column(nullable = false)
+    @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
 
     @CreationTimestamp
-    @Column(updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
+    @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
+    @Column(nullable = false)
     private String address;
 
     @Column(name = "nic", nullable = false, unique = true)
@@ -98,7 +102,7 @@ public class UserEntity  implements UserDetails {
         return passwordHash;
     }
 
-    @Override public String getUsername() { return email; }
+    @Override public String getUsername() { return firstName + " " + lastName; }
 
     @Override public boolean isAccountNonExpired() { return true; }
     @Override public boolean isAccountNonLocked() { return true; }

@@ -39,7 +39,7 @@ public class SkillMentorRootApplication {
 // clear error res on sig-up and login (done)
 // supabase migration (done)
 
-// list sessions by student id
+// list sessions by student id (done)
 // jason property seen eka hadanna
 // learn CI/CD on hex coder
 // render deployment with CI/CD
