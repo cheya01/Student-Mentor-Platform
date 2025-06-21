@@ -33,7 +33,7 @@ src/main/resources/application.properties
 
 
 # Package outputs
-*.jar
+#*.jar
 *.war
 
 # Misc
