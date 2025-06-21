@@ -45,6 +45,7 @@ public class SkillMentorRootApplication {
 
 // learn CI/CD on hex coder
 // render deployment with CI/CD
+// test commit
 // sonar cube (done)
 // jenkins
 // veracode
