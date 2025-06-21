@@ -14,7 +14,7 @@ logs/
 dump.rdb
 
 # Maven
-.mvn/
+#.mvn/
 .settings/
 .classpath
 .project
